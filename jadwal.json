@@ -1,0 +1,22 @@
+[
+    {
+        "hari": "Senin",
+        "pelajaran": ["Sejarah", "Pa Topan", "Jepang", "Inggris", "PPKN"]
+    },
+    {
+        "hari": "Selasa",
+        "pelajaran": ["Bu Retno", "Matematika", "Agama"]
+    },
+    {
+        "hari": "Rabu",
+        "pelajaran": ["Bahasa Indonesia", "PKK", "Pa Topan"]
+    },
+    {
+        "hari": "Kamis",
+        "pelajaran": ["PKK", "Pa Asep", "Pa Dzikri"]
+    },
+    {
+        "hari": "Jumat",
+        "pelajaran": ["Pa Dede", "Olahraga", "Inggris"]
+    }
+]

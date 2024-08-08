@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jadwal Pelajaran dari JSON</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .wrap {
+            overflow-x: auto;
+        }
+        
+        .info {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-content: center;
+            align-items: center;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #444;
+        }
+
+        p {
+            margin-bottom: -25px;
+        }
+
+        img {
+            width: 20vw;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #ddd;
+        }
+
+        @media (max-width: 700px) {
+            p {
+                margin-bottom: 0px;
+            }
+            
+            img {
+                width: 50vw;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Jadwal Pelajaran XI RPL 2</h1>
+        <div class="wrap">
+            <table id="jadwalTable">
+                <thead>
+                    <tr>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="info">
+        <p id="jadwalBesok">Memuat jadwal...</p>
+        <img src="./sleep.gif" alt="tidur">
+    </div>
+
+    <script>
+        fetch('./jadwal.json')
+            .then(response => response.json())
+            .then(data => {
+                const tableHead = document.querySelector("#jadwalTable thead tr");
+                const tableBody = document.querySelector("#jadwalTable tbody");
+
+                data.forEach(item => {
+                    const hariHeader = document.createElement("th");
+                    hariHeader.textContent = item.hari;
+                    tableHead.appendChild(hariHeader);
+                });
+
+                const numPelajaran = data[0].pelajaran.length;
+
+                for (let i = 0; i < numPelajaran; i++) {
+                    const row = document.createElement("tr");
+
+                    data.forEach(item => {
+                        const pelajaranCell = document.createElement("td");
+                        pelajaranCell.textContent = item.pelajaran[i] || "-";
+                        row.appendChild(pelajaranCell);
+                    });
+
+                    tableBody.appendChild(row);
+                }
+
+                const daysOfWeek = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+                const today = new Date().getDay();
+                const tomorrow = (today + 1) % 7;
+
+                const jadwalBesok = data.find(item => item.hari === daysOfWeek[tomorrow]);
+
+                const jadwalBesokText = document.getElementById("jadwalBesok");
+                if (jadwalBesok) {
+                    jadwalBesokText.innerHTML = `Besok hari <b>${jadwalBesok.hari}</b>, bawa buku pelajaran: ${jadwalBesok.pelajaran.join(', ')}.`;
+                } else {
+                    jadwalBesokText.innerHTML = `Besok adalah hari <b>${daysOfWeek[tomorrow]}</b>. Tidak ada jadwal pelajaran yang tersedia.`;
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    </script>
+</body>
+</html>
